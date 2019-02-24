@@ -1,19 +1,18 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 import wave, pyaudio
-from piano import *
-from constants import *
+import piano as piano
+import config as puzzle_config
 
-tones = np.array([get_fr_hz(i+1) for i in range(88)])
+TONES = np.array([piano.get_fr_hz(n_key+1) for n_key in range(88)])
 
-def match_tone(f):
-	if f == 0:
+def match_tone(f_Hz):
+	if f_Hz == 0:
 		return None
-	match = np.argmin(abs(tones-f)) + 1
+	match = np.argmin(abs(TONES - f_Hz)) + 1 # nth piano key
 	return match
 
 def extract_tone(filename, play=False):
-	print "Processing... " + filename
+	print "\nProcessing... " + filename
 	chunk = 4096
 	try:
 		wf = wave.open(filename)
@@ -48,7 +47,7 @@ def extract_tone(filename, play=False):
 	    which = fftData[1:].argmax() + 1
 	    # use quadratic interpolation around the max
 	    if which != len(fftData)-1:
-	        y0,y1,y2 = np.log(fftData[which-1:which+2:])
+	        y0, y1, y2 = np.log(fftData[which-1:which+2:])
 	        x1 = (y2 - y0) * .5 / (2 * y1 - y2 - y0)
 	        # find the frequency and output it
 	        fr = (which + x1) * RATE / chunk
@@ -56,7 +55,8 @@ def extract_tone(filename, play=False):
 	        fr = which * RATE / chunk
 	    data = wf.readframes(chunk)
 	tone = match_tone(fr)
-	print "Key #: " + str(tone)
+	if tone is not None:
+		print "Keyboard #: " + str(tone)
 	if play:
 		if data:
 			stream.write(data)
@@ -70,12 +70,16 @@ def pad(s, n):
 		s = "0" + s
 	return s
 
-ascii_notes = ""
-for i in range(6*len(BRAILLE_CLUEPHRASE.replace(" ", ""))):
-	tone = extract_tone("files/{0}.wav".format(pad(i+1, 3)))
-	if tone is not None:
-		ascii_notes += chr(tone)
-		print ascii_notes
+def main():
+	ascii_notes = ""
+	CLUE_LETTERS = puzzle_config.BRAILLE_CLUEPHRASE.replace(" ", "")
+	for i in range(6*len(CLUE_LETTERS)):
+		tone = extract_tone("files/{0}.wav".format(pad(i+1, 3)))
+		if tone is not None:
+			ascii_notes += chr(tone)
 
-print ascii_notes
-assert ascii_notes == "".join(map(chr, INTERSPERSED_NOTES))
+	print "\n=== Extraction: " + ascii_notes
+	assert ascii_notes == "".join(map(chr, puzzle_config.INTERSPERSED_NOTES))
+
+if __name__ == "__main__":
+	main()

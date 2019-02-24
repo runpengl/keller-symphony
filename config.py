@@ -37,6 +37,7 @@ n_braille_dots = "".join(map(lambda x:BRAILLE_DICT[x]["bin"], BRAILLE_CLUEPHRASE
 #print n_braille_dots, len(INTERSPERSED_NOTES)
 assert n_braille_dots == len(INTERSPERSED_NOTES)
 
-# sanity check
-print INTERSPERSED_NOTES
-print "".join(map(chr, INTERSPERSED_NOTES))
+if __name__ == "__main__":
+	# sanity check
+	print INTERSPERSED_NOTES
+	print "".join(map(chr, INTERSPERSED_NOTES))
