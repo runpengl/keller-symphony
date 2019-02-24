@@ -81,5 +81,20 @@ def main():
 	print "\n=== Extraction: " + ascii_notes
 	assert ascii_notes == "".join(map(chr, puzzle_config.INTERSPERSED_NOTES))
 
+	bad_notes = ""
+	pointer = 0
+	for c in ascii_notes:
+		if c != puzzle_config.NOTES_CLUEPHRASE[pointer]:
+			bad_notes += c
+		else:
+			pointer += 1
+	bad_notes = map(ord, bad_notes)
+
+	print "\n=== Bad notes: "
+	print bad_notes
+
+	extract_answer = "".join([chr(x - puzzle_config.CLUED_MELODY[i] + 64) for (i, x) in enumerate(bad_notes)])
+	print "\n=== Answer: " + extract_answer
+
 if __name__ == "__main__":
 	main()
