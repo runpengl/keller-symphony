@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding('UTF8')
 
 s = '''ASCII Hex,ASCII Glyph,Braille Dots,Braille Meaning
 40	@	010000	⠈ 
@@ -52,8 +49,8 @@ def encode(letter, form="bin"):
 	raise Exception("Could not encode: " + letter)
 
 def main():
-	print "Letter\tBinary\tDots\n"
-	print "\n".join(["\t".join(map(unicode, row)) for row in [[decode(encode(k)), encode(k), encode(k, "dots")] for k in sorted(BRAILLE_DICT.keys())]])
+	print("Letter\tBinary\tDots\n")
+	print("\n".join(["\t".join(map(unicode, row)) for row in [[decode(encode(k)), encode(k), encode(k, "dots")] for k in sorted(BRAILLE_DICT.keys())]]))
 
 if __name__ == "__main__":
 	main()

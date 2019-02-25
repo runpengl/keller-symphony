@@ -2,6 +2,7 @@ import sys, os
 import config as puzzle_config
 import braille as braille
 from shutil import copyfile
+from synthesizer import make_tone
 
 OUTPUT_HTML = "puzzle.html"
 HTML_TEMPLATE = "template/puzzle_template.html"
@@ -54,7 +55,8 @@ def get_audio_files(braille_codes, start_index):
 			filename = "files/{}.wav".format(pad(start_index, 3))
 			if p == "1":
 				# tone file
-				copyfile("pure_tones/{0}.wav".format(puzzle_config.INTERSPERSED_NOTES[NOTES_INDEX]), filename)
+				#copyfile("pure_tones/{0}.wav".format(puzzle_config.INTERSPERSED_NOTES[NOTES_INDEX]), filename)
+				make_tone(puzzle_config.INTERSPERSED_NOTES[NOTES_INDEX], filename, l=puzzle_config.INTERSPERSED_NOTES_LEN[NOTES_INDEX])
 				NOTES_INDEX += 1
 			else:
 				# silent file

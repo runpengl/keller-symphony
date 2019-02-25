@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import numpy as np
 import wave, pyaudio
 import piano as piano
@@ -17,7 +19,7 @@ def match_tone(f_Hz):
 	return match
 
 def extract_tone(filename, play=False):
-	print "\nProcessing... " + filename
+	print("\nProcessing... %s" % filename)
 	chunk = 4096
 	try:
 		wf = wave.open(filename)
@@ -64,7 +66,7 @@ def extract_tone(filename, play=False):
 		data = wf.readframes(chunk)
 	tone = match_tone(fr)
 	if tone is not None:
-		print "Keyboard #: " + str(tone)
+		print("Keyboard #: %s" % tone)
 	if play:
 		if data:
 			stream.write(data)
@@ -94,20 +96,18 @@ def main():
 			braille_decode += braille.decode(braille_dots)
 			braille_dots = ""
 
-	print "\n=== Braille: " + braille_decode
+	print("\n=== Braille:\n%s " % braille_decode)
 
-	print "\n=== Extraction: " + ascii_notes
+	print("\n=== Extraction:\n%s " % ascii_notes)
 	assert ascii_notes == "".join(map(chr, puzzle_config.INTERSPERSED_NOTES))
 
-	bad_notes = "<0.,9<?+6-9@@>>4A;4.@78(8.):-79;6+566)61--658+2"
-	bad_notes = map(ord, bad_notes)
-
-	print "\n=== Bad notes: "
-	print bad_notes
+	bad_notes = ascii_notes.split(": ")[1].split(" ")[0]
+	bad_notes = [ord(x) for x in bad_notes]
+	print("\n=== Bad notes:\n%s " % bad_notes)
 
 	extract_answer = "".join([chr(x - puzzle_config.CLUED_MELODY[i] + 64) for (i, x) in enumerate(bad_notes)])
 	assert extract_answer == puzzle_config.FINAL_SOLUTION
-	print "\n=== Answer: " + extract_answer
+	print("\n=== Answer:\n%s " % extract_answer)
 
 if __name__ == "__main__":
 	main()

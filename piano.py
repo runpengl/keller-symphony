@@ -21,8 +21,8 @@ def get_fr_hz(nth_key):
 	return 440. * 2 ** ((nth_key-49)/12.)
 
 def main():
-	print ("Key #\tNote\tTone fr.(Hz)\n")
-	print ("\n".join(["\t".join(map(str, row)) for row in [[get_nth_key(note), get_eng_notation(i+1), get_fr_hz(i+1)] for (i, note) in enumerate(KEYS)]]))
+	print("Key #\tNote\tTone fr.(Hz)\n")
+	print("\n".join(["\t".join(map(str, row)) for row in [[get_nth_key(note), get_eng_notation(i+1), get_fr_hz(i+1)] for (i, note) in enumerate(KEYS)]]))
 
 if __name__ == "__main__":
 	main()
