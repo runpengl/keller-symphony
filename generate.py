@@ -1,6 +1,6 @@
 import sys, os
 import config as puzzle_config
-import braille
+import braille as braille
 from shutil import copyfile
 
 OUTPUT_HTML = "puzzle.html"
@@ -69,7 +69,7 @@ def main():
 	audio_index = 1
 	BRAILLE_CLUE_WORDS = puzzle_config.BRAILLE_CLUEPHRASE.split(" ")
 	for (i, word) in enumerate(BRAILLE_CLUE_WORDS):
-		audio_files = get_audio_files(map(lambda x:braille.BRAILLE_DICT[x]["bin"], word), audio_index)
+		audio_files = get_audio_files(map(braille.encode, word), audio_index)
 		audio_index += len(word) * 6
 		html_string = to_html_table(audio_files)
 

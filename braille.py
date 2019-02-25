@@ -38,3 +38,22 @@ BRAILLE_DICT[" "] = { "bin": "000000", "dots": "\t" }
 for line in s:
 	parts = line.split()
 	BRAILLE_DICT[parts[1]] = { "bin": parts[2], "dots": parts[3] }
+
+def decode(inp, form="bin"):
+	for k in BRAILLE_DICT:
+		if BRAILLE_DICT[k][form] == inp:
+			return k
+	raise Exception("Could not decode: " + inp)
+
+def encode(letter, form="bin"):
+	letter = letter.upper()
+	if letter in BRAILLE_DICT:
+		return BRAILLE_DICT[letter][form]
+	raise Exception("Could not encode: " + letter)
+
+def main():
+	print "Letter\tBinary\tDots\n"
+	print "\n".join(["\t".join(map(unicode, row)) for row in [[decode(encode(k)), encode(k), encode(k, "dots")] for k in sorted(BRAILLE_DICT.keys())]])
+
+if __name__ == "__main__":
+	main()
